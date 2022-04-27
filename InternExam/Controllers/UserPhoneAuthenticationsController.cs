@@ -10,22 +10,22 @@ namespace InternExam.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersAuthenticationController : ControllerBase
+    public class UserPhoneAuthenticationsController : ControllerBase
     {
-        public static UserRegister users = new UserRegister();
+        public static UserPhoneRegister users = new UserPhoneRegister();
         private readonly IConfiguration _configuration;
 
-        public UsersAuthenticationController(IConfiguration configuration)
+        public UserPhoneAuthenticationsController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<UserRegister>> Register(UserDto request)
+        public async Task<ActionResult<UserPhoneRegister>> Register(UserPhoneDto request)
         {
-            CreatePasswordHash(request.UsersEmail, out byte[] UsersPasswordHash, out byte[] UsersPasswordSalt);
+            CreatePasswordHash(request.UsersPhone, out byte[] UsersPasswordHash, out byte[] UsersPasswordSalt);
 
-            users.UsersEmail = request.UsersEmail;
+            users.UsersPhone = request.UsersPhone;
             users.UsersPasswordHash = UsersPasswordHash;
             users.UsersPasswordSalt = UsersPasswordSalt;
 
@@ -33,11 +33,11 @@ namespace InternExam.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDto request)
+        public async Task<ActionResult<string>> Login(UserEmailDto request)
         {
-            if (users.UsersEmail != request.UsersEmail)
+            if (users.UsersPhone != request.UsersEmail)
             {
-                return BadRequest("Email not found.");
+                return BadRequest("Phone not found.");
             }
 
             if (!VerifyPasswordHash(request.UsersPassword, users.UsersPasswordHash, users.UsersPasswordSalt))
@@ -49,11 +49,11 @@ namespace InternExam.Controllers
             return Ok(token);
         }
 
-        private string CreateToken(UserRegister user)
+        private string CreateToken(UserEmailRegister user)
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, users.UsersEmail),
+                new Claim(ClaimTypes.Name, users.UsersPhone),
                 new Claim(ClaimTypes.Role, "user")
             };
 
