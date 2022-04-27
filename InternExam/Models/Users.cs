@@ -1,7 +1,10 @@
-﻿namespace InternExam.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace InternExam.Models
 {
     public class Users
     {
+        [Key]
         public int UserId { get; set; }
         public string UserFullName { get; set; } = string.Empty;
         public string UserPhone { get; set; } = string.Empty;
