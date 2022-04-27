@@ -33,9 +33,9 @@ namespace InternExam.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserEmailDto request)
+        public async Task<ActionResult<string>> Login(UserPhoneDto request)
         {
-            if (users.UsersPhone != request.UsersEmail)
+            if (users.UsersPhone != request.UsersPhone)
             {
                 return BadRequest("Phone not found.");
             }
@@ -49,7 +49,7 @@ namespace InternExam.Controllers
             return Ok(token);
         }
 
-        private string CreateToken(UserEmailRegister user)
+        private string CreateToken(UserPhoneRegister user)
         {
             List<Claim> claims = new List<Claim>
             {
